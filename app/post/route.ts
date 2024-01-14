@@ -33,6 +33,10 @@ export async function GET(req: NextRequest) {
     }
   )
 
+  if (!res.ok) {
+    return NextResponse.error()
+  }
+
   const data = await res.json()
   
   const comments = data[1].data.children.map((comment: any) => buildCommentTree(comment))
