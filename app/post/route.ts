@@ -34,16 +34,21 @@ export async function GET(req: NextRequest) {
   )
 
   if (!res.ok) {
+    console.log('res not ok', res)
     return NextResponse.error()
   }
 
   const data = await res.json()
+  
+  console.log('parsed', data)
   
   const comments = data[1].data.children.map((comment: any) => buildCommentTree(comment))
   
   const post = data[0].data.children[0].data satisfies Post
 
   await kv.set(post.id, JSON.stringify({ comments, post, fetched_at: Date.now() }))
+
+  console.log('sending', { comments, post, fetched_at: Date.now() })
 
   return NextResponse.json({ comments, post, fetched_at: Date.now() })
 }
