@@ -2,6 +2,7 @@ export type Comment = {
   author: string
   score: number
   body: string
+  replies?: Comment[]
 }
 
 export type Post = {

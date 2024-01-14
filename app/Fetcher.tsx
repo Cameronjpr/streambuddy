@@ -9,7 +9,7 @@ import { Post } from './types'
 const FETCH_INTERVAL = 60
 
 export function Fetcher() {
-  const [currentData, setCurrentData] = useState({
+  const [data, setData] = useState({
     post: {} as Post,
     comments: [],
     fetched_at: null,
@@ -17,10 +17,10 @@ export function Fetcher() {
   const [countdown, setCountdown] = useState(FETCH_INTERVAL)
 
   async function fetchData() {
-    const res = await fetch('/post?id=195sgps')
+    const res = await fetch('/post?id=196mg2i')
     const data = await res.json()
 
-    setCurrentData(data)
+    setData(data)
   }
 
   useEffect(() => {
@@ -44,18 +44,20 @@ export function Fetcher() {
 
   return (
     <div className="flex flex-col gap-4">
-      <section className="flex justify-between gap-8 text-xs font-mono border-b-2 border-slate-200 text-slate-600">
+      <section className="flex justify-between gap-8 text-xs font-mono">
         <span>Updating in {countdown}...</span>
         <span>
-          Fetched at{' '}
-          {currentData?.fetched_at
-            ? new Date(currentData.fetched_at).toLocaleString()
-            : ''}
+          Last updated at{' '}
+          {data?.fetched_at ? new Date(data.fetched_at).toLocaleString() : ''}
         </span>
       </section>
       <div className="flex flex-col gap-8">
-        <PostInfo {...currentData.post} />
-        <CommentList comments={currentData.comments} />
+        <PostInfo {...data.post} />
+
+        <section>
+          <h2>{data.comments.length} Comments</h2>
+          <CommentList comments={data.comments} />
+        </section>
       </div>
     </div>
   )

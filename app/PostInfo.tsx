@@ -14,8 +14,8 @@ export function PostInfo(props: Post) {
   }
 
   return (
-    <section>
-      <p className="text-sm text-slate-700">
+    <section className="border-2 border-slate-400 p-2 rounded-md">
+      <p className="text-sm text-slate-500">
         {subreddit_name_prefixed} • {author} • {score}
       </p>
       <h2>{title}</h2>
