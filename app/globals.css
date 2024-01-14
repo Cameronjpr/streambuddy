@@ -22,7 +22,7 @@
     @apply text-blue-600 underline;
   }
   input {
-    @apply border border-gray-300 bg-transparent rounded px-2 py-1 block w-full max-w-xs text-black;
+    @apply border border-gray-300 bg-transparent text-white rounded px-2 py-1 block w-full max-w-xs;
   }
   label {
     @apply block mb-1 text-left;
