@@ -7,12 +7,15 @@ export default async function Home() {
     let threadLink = formData.get('match-thread') as string
     let splitLink = threadLink.split('/')
 
+    console.log(splitLink)
     // Catch mobile share links and grab the underlying thread link
     if (
       splitLink[2] === 'www.reddit.com' &&
       splitLink.some((part) => part === 's')
     ) {
       const res = await fetch(threadLink)
+
+      console.log(res.url)
 
       threadLink = res.url.split('?')[0]
       splitLink = threadLink.split('/')
