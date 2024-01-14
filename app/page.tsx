@@ -4,17 +4,31 @@ export default async function Home() {
   async function followThread(formData: FormData) {
     'use server'
 
-    const threadLink = formData.get('match-thread') as string
+    let threadLink = formData.get('match-thread') as string
+    let splitLink = threadLink.split('/')
+
+    // Catch mobile share links and grab the underlying thread link
+    if (
+      splitLink[2] === 'www.reddit.com' &&
+      splitLink.some((part) => part === 's')
+    ) {
+      const res = await fetch(threadLink)
+
+      threadLink = res.url.split('?')[0]
+      splitLink = threadLink.split('/')
+    }
 
     let threadId
     try {
-      threadId = threadLink?.split('/')?.[6]
+      threadId = splitLink?.[6]
+
+      console.log(threadId)
     } catch (error) {
       throw new Error('Invalid thread link')
     }
 
     if (!!threadId) {
-      redirect(`/thread/${threadId}`)
+      redirect(`/threads/${threadId}`)
     }
   }
 

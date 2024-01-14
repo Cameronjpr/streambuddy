@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
   const cached = await kv.get(id)
 
   if (cached) {
+    console.log('cached', cached)
     const { comments, post, fetched_at } = cached as any
     const age = Date.now() - fetched_at
 
@@ -26,7 +27,7 @@ export async function GET(req: NextRequest) {
 
   // If we don't have a cached version, fetch it from Reddit
   const res = await fetch(
-    'https://www.reddit.com/r/soccer/comments/196mg2i/post_match_thread_manchester_united_22_tottenham.json',
+    `https://www.reddit.com/r/soccer/comments/${id}.json`,
     {
       next: { revalidate: 30 },
     }
