@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { kv } from '@vercel/kv'
 import { Post } from '../types'
 
@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
   console.log(id)
   if (!id) {
-    return Response.error()
+    return NextResponse.error()
   }
 
   const cached = await kv.get(id)
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     const age = Date.now() - fetched_at
 
     if (age < 1000 * 60) { // 1 minute
-      return Response.json({ comments, post, fetched_at })
+      return NextResponse.json({ comments, post, fetched_at })
     }
   }
 
@@ -43,5 +43,5 @@ export async function GET(req: NextRequest) {
 
   await kv.set(post.id, JSON.stringify({ comments, post, fetched_at: Date.now() }))
 
-  return Response.json({ comments, post, fetched_at: Date.now() })
+  return NextResponse.json({ comments, post, fetched_at: Date.now() })
 }
