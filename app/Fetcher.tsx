@@ -6,36 +6,21 @@ import { CommentList } from './CommentList'
 import { PostInfo } from './PostInfo'
 import { Post } from './types'
 
-const FETCH_INTERVAL = 30
+const FETCH_INTERVAL = 60
 
 export function Fetcher() {
-  const [data, setData] = useState({
+  const [currentData, setCurrentData] = useState({
     post: {} as Post,
     comments: [],
+    fetched_at: null,
   })
   const [countdown, setCountdown] = useState(FETCH_INTERVAL)
 
-  function fetchData() {
-    let post, comments
+  async function fetchData() {
+    const res = await fetch('/post?id=195sgps')
+    const data = await res.json()
 
-    fetch(
-      'https://www.reddit.com/r/LeedsUnited/comments/195sgps/post_match_thread_cardiff_city_03_leeds_united.json'
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        comments = data[1].data.children.map(({ data }: { data: any }) => ({
-          author: data.author,
-          score: data.ups - data.downs,
-          body: data.body,
-        }))
-        post = data[0].data.children[0].data
-        console.log(post)
-
-        setData({
-          post,
-          comments,
-        })
-      })
+    setCurrentData(data)
   }
 
   useEffect(() => {
@@ -44,7 +29,7 @@ export function Fetcher() {
 
   useEffect(() => {
     if (countdown === 0) {
-      // fetchData()
+      fetchData()
       setCountdown(FETCH_INTERVAL)
     }
   }, [countdown])
@@ -63,8 +48,12 @@ export function Fetcher() {
         Updating in {countdown}...
       </span>
       <div className="flex flex-col gap-8">
-        <PostInfo {...data.post} />
-        <CommentList comments={data.comments} />
+        Fetched at{' '}
+        {currentData?.fetched_at
+          ? new Date(currentData.fetched_at).toLocaleString()
+          : ''}
+        <PostInfo {...currentData.post} />
+        <CommentList comments={currentData.comments} />
       </div>
     </div>
   )
