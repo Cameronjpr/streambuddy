@@ -43,15 +43,17 @@ export function Fetcher() {
   }, [])
 
   return (
-    <div>
-      <span className="animate-pulse text-xs font-mono text-left">
-        Updating in {countdown}...
-      </span>
+    <div className="flex flex-col gap-4">
+      <section className="flex justify-between gap-8 text-xs font-mono border-b-2 border-slate-200 text-slate-600">
+        <span>Updating in {countdown}...</span>
+        <span>
+          Fetched at{' '}
+          {currentData?.fetched_at
+            ? new Date(currentData.fetched_at).toLocaleString()
+            : ''}
+        </span>
+      </section>
       <div className="flex flex-col gap-8">
-        Fetched at{' '}
-        {currentData?.fetched_at
-          ? new Date(currentData.fetched_at).toLocaleString()
-          : ''}
         <PostInfo {...currentData.post} />
         <CommentList comments={currentData.comments} />
       </div>

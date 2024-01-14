@@ -6,7 +6,6 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams
   const id = searchParams.get('id')
 
-  console.log(id)
   if (!id) {
     return NextResponse.error()
   }
