@@ -10,8 +10,7 @@
 
 @layer base {
   h1 {
-    @apply text-2xl;
-    @apply font-bold;
+    @apply text-2xl font-bold;
   }
   h2 {
     @apply text-xl;
@@ -21,6 +20,15 @@
   }
   a {
     @apply text-blue-600 underline;
+  }
+  input {
+    @apply border border-gray-300 bg-transparent rounded px-2 py-1 block w-full max-w-xs text-black;
+  }
+  label {
+    @apply block mb-1 text-left;
+  }
+  button {
+    @apply border border-gray-300 rounded font-bold px-2 py-1 block w-full max-w-xs;
   }
 }
 

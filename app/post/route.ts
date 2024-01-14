@@ -12,12 +12,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.error()
   }
 
+  // Check if we have a cached version of the post
   const cached = await kv.get(id)
 
   if (cached) {
     const { comments, post, fetched_at } = cached as any
-    console.log(comments)
-
     const age = Date.now() - fetched_at
 
     if (age < 1000 * 60) { // 1 minute
@@ -25,6 +24,7 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // If we don't have a cached version, fetch it from Reddit
   const res = await fetch(
     'https://www.reddit.com/r/soccer/comments/196mg2i/post_match_thread_manchester_united_22_tottenham.json',
     {
@@ -37,8 +37,6 @@ export async function GET(req: NextRequest) {
   const comments = data[1].data.children.map((comment: any) => buildCommentTree(comment))
   
   const post = data[0].data.children[0].data satisfies Post
-
-  console.log(comments)
 
   await kv.set(post.id, JSON.stringify({ comments, post, fetched_at: Date.now() }))
 

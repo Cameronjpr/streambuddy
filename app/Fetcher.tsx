@@ -5,10 +5,17 @@ import { useQueryClient } from 'react-query'
 import { CommentList } from './CommentList'
 import { PostInfo } from './PostInfo'
 import { Post } from './types'
+import { getTotalComments } from './utils'
 
 const FETCH_INTERVAL = 60
 
-export function Fetcher() {
+type FetcherProps = {
+  threadId: string
+}
+
+export function Fetcher(props: FetcherProps) {
+  const { threadId } = props
+
   const [data, setData] = useState({
     post: {} as Post,
     comments: [],
@@ -17,7 +24,7 @@ export function Fetcher() {
   const [countdown, setCountdown] = useState(FETCH_INTERVAL)
 
   async function fetchData() {
-    const res = await fetch('/post?id=196mg2i')
+    const res = await fetch(`/post?id=${threadId}`)
     const data = await res.json()
 
     setData(data)
@@ -43,7 +50,7 @@ export function Fetcher() {
   }, [])
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full sm:max-w-2xl">
       <section className="flex justify-between gap-8 text-xs font-mono">
         <span>Updating in {countdown}...</span>
         <span>
@@ -55,7 +62,7 @@ export function Fetcher() {
         <PostInfo {...data.post} />
 
         <section>
-          <h2>{data.comments.length} Comments</h2>
+          <h2>{getTotalComments(data.comments)} Comments</h2>
           <CommentList comments={data.comments} />
         </section>
       </div>

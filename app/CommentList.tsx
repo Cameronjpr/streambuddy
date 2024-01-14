@@ -6,7 +6,7 @@ type CommentListProps = {
 
 export function CommentList(props: CommentListProps) {
   return (
-    <ul className="flex flex-col gap-4 max-w-2xl">
+    <ul className="flex flex-col gap-4">
       {props.comments.map((comment: Comment) => (
         <li key={comment.author} className="flex flex-col gap-1">
           <span className="text-sm text-slate-500">

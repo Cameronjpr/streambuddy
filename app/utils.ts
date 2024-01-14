@@ -19,3 +19,13 @@ export function buildCommentTree(rawComment: unknown): Comment {
     replies: data.replies?.data?.children.map(buildCommentTree),
   }
 }
+
+export function getTotalComments(comments: Comment[]): number {
+  return comments.reduce((total, comment) => {
+    if (!comment.replies) {
+      return total + 1
+    }
+
+    return total + 1 + getTotalComments(comment.replies)
+  }, 0)
+}
